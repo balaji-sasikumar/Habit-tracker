@@ -1,25 +1,54 @@
 .bubbleContainer {
+  position: relative;
   display: flex;
-  align-items: center;
+  margin-top: 12px;
   margin-bottom: 10px;
 }
 
-/* WhatsApp-style chat / About speech bubble */
-.chatBubble {
+/* Comic Thinking Bubble */
+.thoughtBubble {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background: #1B242C;
-  border: 1px solid rgba(82, 199, 125, 0.25);
-  border-radius: 14px 14px 14px 4px;
-  padding: 7px 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid rgba(82, 199, 125, 0.35);
+  border-radius: 18px;
+  padding: 8px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   max-width: 100%;
 }
 
+/* Comic thought trail dot 1 (medium circle leading up) */
+.thoughtBubble::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 24px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1B242C;
+  border: 1.5px solid rgba(82, 199, 125, 0.35);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Comic thought trail dot 2 (small circle leading further up towards greeting) */
+.thoughtBubble::after {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 18px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1B242C;
+  border: 1.5px solid rgba(82, 199, 125, 0.35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
 .emoji {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1;
   flex-shrink: 0;
 }
@@ -35,5 +64,6 @@
   font-weight: 500;
   line-height: 1.35;
   color: #D1D7DB;
+  font-style: italic;
   white-space: normal;
 }

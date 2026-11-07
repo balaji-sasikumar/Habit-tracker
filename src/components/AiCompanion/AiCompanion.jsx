@@ -11,12 +11,11 @@ export default function AiCompanion({ habits = null }) {
 
   return (
     <div className={styles.bubbleContainer}>
-      <div className={styles.chatBubble}>
-        <span className={styles.emoji}>{insight.emoji || '💬'}</span>
+      <div className={styles.thoughtBubble}>
+        <span className={styles.emoji}>{insight.emoji || '💭'}</span>
         <div className={styles.content}>
           <span className={styles.text}>{insight.text}</span>
         </div>
-        <span className={styles.tail} />
       </div>
     </div>
   )
