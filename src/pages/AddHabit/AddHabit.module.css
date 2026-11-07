@@ -22,17 +22,15 @@
   height: 40px;
   border-radius: 12px;
   background: var(--card-bg);
-  color: var(--text-dark);
-  font-size: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   box-shadow: var(--shadow-sm);
-  font-weight: 300;
-  padding-bottom: 2px;
+  display: grid;
+  place-items: center;
+  color: var(--text-dark);
   transition: background 0.15s;
+  flex-shrink: 0;
 }
 .backBtn:active { background: var(--orange-light); }
+.backBtn svg { display: block; }
 
 .title {
   font-size: 20px;

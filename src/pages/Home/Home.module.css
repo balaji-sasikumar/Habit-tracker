@@ -43,6 +43,7 @@
   font-weight: 500;
 }
 
+/* Avatar button — grid center guarantees true centering */
 .avatar {
   width: 44px;
   height: 44px;
@@ -50,20 +51,26 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--orange), var(--orange-dark));
   box-shadow: 0 4px 14px rgba(255,140,66,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
   transition: transform 0.15s;
+  position: relative;
 }
 .avatar:active { transform: scale(0.92); }
 
+/* Absolute-transform trick: mathematically centered regardless of font metrics */
 .avatarLetter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   color: white;
   font-size: 18px;
   font-weight: 800;
   line-height: 1;
   display: block;
+  pointer-events: none;
 }
 
 /* Progress */
@@ -167,7 +174,7 @@
   line-height: 1.5;
 }
 
-/* FAB */
+/* FAB — SVG cross is always pixel-perfect centered */
 .fab {
   position: absolute;
   bottom: 24px;
@@ -177,9 +184,8 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--orange), var(--orange-dark));
   box-shadow: 0 6px 22px rgba(255, 140, 66, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   z-index: 50;
   transition: transform 0.18s, box-shadow 0.18s;
 }
@@ -187,12 +193,4 @@
   transform: scale(0.9);
   box-shadow: 0 3px 10px rgba(255, 140, 66, 0.3);
 }
-
-.fabIcon {
-  color: white;
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
-  display: block;
-  margin-top: 2px;
-}
+.fab svg { display: block; }

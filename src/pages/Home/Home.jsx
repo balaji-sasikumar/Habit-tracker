@@ -114,7 +114,9 @@ export default function Home({ habitStore }) {
 
       {/* FAB */}
       <button className={styles.fab} onClick={() => navigate('/add')} aria-label="Add habit">
-        <span className={styles.fabIcon}>+</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M10 2V18M2 10H18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
       </button>
 
       {/* Profile modal */}
