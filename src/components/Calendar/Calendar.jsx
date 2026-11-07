@@ -42,6 +42,9 @@ function getMonthCells(anchor) {
   return cells
 }
 
+const CIRCLE_RADIUS = 15
+const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS // ≈ 94.25
+
 export default function Calendar({
   habits,
   selectedDate,
@@ -100,6 +103,10 @@ export default function Calendar({
   const weekDays   = getWeekDays(anchor)
   const monthCells = getMonthCells(anchor)
 
+  // Circular progress calculation
+  const safeProgress = Math.min(Math.max(progress, 0), 100)
+  const strokeDashoffset = CIRCUMFERENCE - (safeProgress / 100) * CIRCUMFERENCE
+
   return (
     <div className={styles.wrapper}>
       {/* Header */}
@@ -136,31 +143,41 @@ export default function Calendar({
         : <div className={styles.monthGrid}>{monthCells.map((d, i) => renderDay(d, i))}</div>
       }
 
-      {/* Integrated Progress Indicator (no separate bulky card needed) */}
-      {totalCount > 0 && (
-        <div className={styles.progressContainer}>
-          <div className={styles.progressHeader}>
-            <span className={styles.progressLabel}>
-              {dateLabel} · <span className={styles.progressSub}>{completedCount}/{totalCount} done</span>
-            </span>
-            <span className={`${styles.progressPct} ${progress === 100 ? styles.progressPctComplete : ''}`}>
-              {Math.round(progress)}%
-            </span>
-          </div>
-          <div className={styles.progressBar}>
-            <div
-              className={`${styles.progressFill} ${progress === 100 ? styles.progressFillComplete : ''}`}
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+      {/* Unified Footer: Legend on Left + Circular Progress Ring on Right */}
+      <div className={styles.footerRow}>
+        <div className={styles.legend}>
+          <span className={styles.legendItem}><span className={`${styles.dot} ${styles.dotAll}`} />All done</span>
+          <span className={styles.legendItem}><span className={`${styles.dot} ${styles.dotPartial}`} />Partial</span>
+          <span className={styles.legendItem}><span className={`${styles.dot} ${styles.dotMissed}`} />Missed</span>
         </div>
-      )}
 
-      {/* Legend */}
-      <div className={styles.legend}>
-        <span className={styles.legendItem}><span className={`${styles.dot} ${styles.dotAll}`} />All done</span>
-        <span className={styles.legendItem}><span className={`${styles.dot} ${styles.dotPartial}`} />Partial</span>
-        <span className={styles.legendItem}><span className={`${styles.dot} ${styles.dotMissed}`} />Missed</span>
+        {totalCount > 0 && (
+          <div className={styles.ringWrapper} title={`${dateLabel}: ${completedCount}/${totalCount} done (${Math.round(safeProgress)}%)`}>
+            <svg className={styles.ringSvg} width="38" height="38" viewBox="0 0 38 38">
+              {/* Background Track */}
+              <circle
+                cx="19"
+                cy="19"
+                r={CIRCLE_RADIUS}
+                className={styles.ringTrack}
+              />
+              {/* Animated Progress Ring */}
+              <circle
+                cx="19"
+                cy="19"
+                r={CIRCLE_RADIUS}
+                className={`${styles.ringFill} ${safeProgress === 100 ? styles.ringFillComplete : ''}`}
+                style={{
+                  strokeDasharray: CIRCUMFERENCE,
+                  strokeDashoffset: strokeDashoffset,
+                }}
+              />
+            </svg>
+            <span className={`${styles.ringText} ${safeProgress === 100 ? styles.ringTextComplete : ''}`}>
+              {completedCount}/{totalCount}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 .wrapper {
   background: var(--card-bg);
   border-radius: var(--radius);
-  padding: 11px 14px 10px;
+  padding: 10px 14px 8px;
   box-shadow: var(--shadow);
   margin-bottom: 12px;
 }
@@ -144,69 +144,21 @@
 .dotMissed  { background: var(--red); opacity: 0.65; }
 .dotHidden  { background: transparent; }
 
-/* Integrated Progress Container */
-.progressContainer {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-}
-
-.progressHeader {
+/* Unified Footer: Legend on Left + Circular Progress Ring on Right */
+.footerRow {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 5px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
+  gap: 12px;
 }
 
-.progressLabel {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-dark);
-}
-
-.progressSub {
-  font-weight: 500;
-  color: var(--text-mid);
-  font-size: 11.5px;
-}
-
-.progressPct {
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--orange);
-}
-
-.progressPctComplete {
-  color: var(--green);
-}
-
-.progressBar {
-  height: 6px;
-  background: var(--border);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--orange), var(--orange-dark));
-  border-radius: 999px;
-  transition: width 0.4s ease;
-}
-
-.progressFillComplete {
-  background: linear-gradient(90deg, var(--green), #6BCB77);
-  box-shadow: 0 0 8px rgba(82, 199, 125, 0.4);
-}
-
-/* Legend */
 .legend {
   display: flex;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 7px;
-  padding-top: 6px;
-  border-top: 1px dashed rgba(42, 45, 58, 0.6);
+  align-items: center;
+  gap: 10px;
 }
 
 .legendItem {
@@ -216,4 +168,55 @@
   font-size: 10px;
   font-weight: 500;
   color: var(--text-light);
+}
+
+/* Circular Progress Ring */
+.ringWrapper {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.ringSvg {
+  transform: rotate(-90deg);
+  display: block;
+}
+
+.ringTrack {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 3.2;
+}
+
+.ringFill {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease, stroke 0.3s;
+}
+
+.ringFillComplete {
+  stroke: var(--green);
+  filter: drop-shadow(0 0 3px rgba(82, 199, 125, 0.4));
+}
+
+.ringText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1;
+  letter-spacing: -0.4px;
+  pointer-events: none;
+}
+
+.ringTextComplete {
+  color: var(--green);
 }
