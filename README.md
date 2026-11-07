@@ -1,16 +1,37 @@
-# React + Vite
+# 🌱 Habit Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A mobile-first **Progressive Web App** to track your daily habits and build streaks.
 
-Currently, two official plugins are available:
+## ✨ Features
+- 🔐 PIN-locked with 15-second idle auto-lock
+- 📅 Week / Month calendar with per-day habit view
+- ✅ Check off habits, see streaks
+- 🌑 Dark theme
+- 📱 Installable PWA (Add to Home Screen on Android & iOS)
+- 💾 Offline-first — all data stored in localStorage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Getting Started
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🏗 Build for Production
 
-## Expanding the Oxlint configuration
+```bash
+npm run build
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Output is in the `dist/` folder — deploy anywhere static hosting is supported.
+
+## 🛠 Tech Stack
+- React + Vite
+- React Router v6
+- CSS Modules
+- vite-plugin-pwa (Workbox)
+
+## 🔮 Planned
+- Backend API + database sync
+- Habit sharing between users
+- Stats / streak charts
