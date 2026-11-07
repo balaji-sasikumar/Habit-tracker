@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icons/*.png'],
+      includeAssets: ['icon.svg', 'favicon.svg'],
       manifest: {
         name: 'Habit Tracker',
         short_name: 'Habits',
@@ -17,10 +17,9 @@ export default defineConfig({
         background_color: '#111318',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: './',
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icon.svg', sizes: '192x192 512x512', type: 'image/svg+xml', purpose: 'any maskable' },
         ],
       },
       workbox: {
