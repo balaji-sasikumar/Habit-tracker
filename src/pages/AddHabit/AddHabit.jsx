@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styles from './AddHabit.module.css'
 
@@ -27,6 +27,21 @@ const ICONS = [
 
 const DEFAULT_ICON = { emoji: '⭐', color: '#FFE5D0' }
 
+function autoMatchIcon(text) {
+  const lower = text.toLowerCase()
+  for (const item of ICONS) {
+    if (lower.includes(item.label.toLowerCase())) return item
+  }
+  if (lower.includes('water') || lower.includes('drink') || lower.includes('hydrate')) return ICONS[0]
+  if (lower.includes('run') || lower.includes('jog') || lower.includes('walk') || lower.includes('step')) return ICONS[1]
+  if (lower.includes('meditat') || lower.includes('yoga') || lower.includes('calm')) return ICONS[2]
+  if (lower.includes('book') || lower.includes('read') || lower.includes('study')) return ICONS[3]
+  if (lower.includes('food') || lower.includes('eat') || lower.includes('diet') || lower.includes('salad')) return ICONS[4]
+  if (lower.includes('sleep') || lower.includes('bed') || lower.includes('nap')) return ICONS[5]
+  if (lower.includes('gym') || lower.includes('workout') || lower.includes('lift') || lower.includes('pushup')) return ICONS[6]
+  return null
+}
+
 export default function AddHabit({ habitStore }) {
   const { id } = useParams()
   const { addHabit, updateHabit, deleteHabit, habits } = habitStore
@@ -42,6 +57,73 @@ export default function AddHabit({ habitStore }) {
   })
   const [error, setError] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [isListening, setIsListening] = useState(false)
+
+  const recognitionRef = useRef(null)
+  const speechSupported = typeof window !== 'undefined' &&
+    !!(window.SpeechRecognition || window.webkitSpeechRecognition)
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort()
+      }
+    }
+  }, [])
+
+  function toggleListening() {
+    if (!speechSupported) return
+
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new SpeechRecognition()
+    recognitionRef.current = recognition
+
+    recognition.continuous = false
+    recognition.interimResults = false
+    recognition.lang = 'en-US'
+
+    recognition.onstart = () => {
+      setIsListening(true)
+      setError('')
+    }
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript
+      if (transcript) {
+        const clean = transcript.trim()
+        const formatted = clean.charAt(0).toUpperCase() + clean.slice(1)
+        setName(formatted)
+        setError('')
+
+        // Auto-match icon if not already picked
+        const matched = autoMatchIcon(clean)
+        if (matched) {
+          setSelected(matched)
+        }
+      }
+      setIsListening(false)
+    }
+
+    recognition.onerror = () => {
+      setIsListening(false)
+    }
+
+    recognition.onend = () => {
+      setIsListening(false)
+    }
+
+    try {
+      recognition.start()
+    } catch {
+      setIsListening(false)
+    }
+  }
 
   function handleSave() {
     if (!name.trim()) { setError('Please enter a habit name'); return }
@@ -81,18 +163,36 @@ export default function AddHabit({ habitStore }) {
         <span className={styles.heroEmoji}>{previewEmoji}</span>
       </div>
 
-      {/* Name input */}
+      {/* Name input with integrated Speech-to-Text Mic */}
       <div className={styles.field}>
         <label className={styles.label}>Name your habit</label>
-        <input
-          className={`${styles.input} ${error ? styles.inputError : ''}`}
-          type="text"
-          placeholder="e.g. Drink a glass of water"
-          value={name}
-          onChange={e => { setName(e.target.value); setError('') }}
-          maxLength={60}
-          autoFocus
-        />
+        <div className={styles.inputWrapper}>
+          <input
+            className={`${styles.input} ${error ? styles.inputError : ''} ${isListening ? styles.inputListening : ''}`}
+            type="text"
+            placeholder={isListening ? '🎙️ Listening... Speak now' : 'e.g. Drink a glass of water'}
+            value={name}
+            onChange={e => { setName(e.target.value); setError('') }}
+            maxLength={60}
+            autoFocus
+          />
+          {speechSupported && (
+            <button
+              type="button"
+              className={`${styles.micBtn} ${isListening ? styles.micBtnListening : ''}`}
+              onClick={toggleListening}
+              aria-label={isListening ? 'Stop listening' : 'Voice input'}
+              title={isListening ? 'Listening...' : 'Voice typing'}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+          )}
+        </div>
         {error && <span className={styles.error}>{error}</span>}
       </div>
 

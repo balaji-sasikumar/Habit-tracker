@@ -71,19 +71,67 @@
   color: var(--text-light);
 }
 
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .input {
   width: 100%;
   background: var(--card-bg);
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
+  padding: 14px 48px 14px 16px;
   font-size: 15px;
   color: var(--text-dark);
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .input::placeholder { color: var(--text-light); }
 .input:focus { border-color: var(--orange); }
 .inputError { border-color: var(--red); }
+
+.inputListening {
+  border-color: var(--orange);
+  box-shadow: 0 0 14px rgba(255, 140, 66, 0.3);
+}
+
+.micBtn {
+  position: absolute;
+  right: 7px;
+  width: 35px;
+  height: 35px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: var(--text-mid);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.micBtn:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.micBtnListening {
+  background: rgba(224, 85, 85, 0.25);
+  border-color: #FF5A5F;
+  color: #FF5A5F;
+  animation: micPulse 1.2s infinite ease-in-out;
+  box-shadow: 0 0 12px rgba(255, 90, 95, 0.45);
+}
+
+@keyframes micPulse {
+  0%, 100% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
 
 .error {
   display: block;
