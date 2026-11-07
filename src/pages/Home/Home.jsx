@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getUser } from '../../utils/storage'
+import { isSameDay, isFutureDay, isCompletedOnDate } from '../../utils/date'
 import Calendar from '../../components/Calendar/Calendar'
 import HabitCard from '../../components/HabitCard/HabitCard'
 import ProfileModal from '../../components/ProfileModal/ProfileModal'
@@ -11,14 +12,6 @@ function getGreeting() {
   if (h < 12) return 'Good morning'
   if (h < 17) return 'Good afternoon'
   return 'Good evening'
-}
-
-function toKey(d) {
-  return d.toISOString().slice(0, 10)
-}
-
-function isSameDay(a, b) {
-  return toKey(a) === toKey(b)
 }
 
 function formatSelectedDate(d, today) {
@@ -38,15 +31,14 @@ export default function Home({ habitStore }) {
   const [showProfile, setShowProfile] = useState(false)
   const [, forceRender] = useState(0)   // force re-render after name change
 
-  const selectedKey = toKey(selectedDate)
   const isToday = isSameDay(selectedDate, today)
-  const isFutureDate = selectedDate > today && !isToday
+  const isFutureDate = isFutureDay(selectedDate, today)
 
   const user = getUser()
 
   const habitsForDate = habits.map(h => ({
     ...h,
-    completedOnDate: !!(h.completions?.[selectedKey]),
+    completedOnDate: isCompletedOnDate(h, selectedDate),
   }))
 
   const completedCount = habitsForDate.filter(h => h.completedOnDate).length

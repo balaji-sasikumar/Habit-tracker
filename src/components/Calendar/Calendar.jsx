@@ -1,29 +1,10 @@
 import { useState } from 'react'
+import { isSameDay, isFutureDay, isCompletedOnDate } from '../../utils/date'
 import styles from './Calendar.module.css'
 
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const MONTHS = ['January','February','March','April','May','June',
                 'July','August','September','October','November','December']
-
-/* ── Helpers ──────────────────────────────────────────── */
-function localKey(d) {
-  const y  = d.getFullYear()
-  const m  = String(d.getMonth() + 1).padStart(2, '0')
-  const dd = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${dd}`
-}
-
-function isSameDay(a, b) {
-  return a.getFullYear() === b.getFullYear() &&
-    a.getMonth()    === b.getMonth()    &&
-    a.getDate()     === b.getDate()
-}
-
-function isFutureDay(d, today) {
-  const a = new Date(d.getFullYear(),    d.getMonth(),    d.getDate())
-  const b = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-  return a > b
-}
 
 /**
  * Returns: 'all' | 'partial' | 'missed' | 'future' | 'none'
@@ -32,8 +13,7 @@ function getDayStatus(date, habits, today) {
   if (!habits.length) return 'none'
   if (isFutureDay(date, today)) return 'future'
 
-  const key       = localKey(date)
-  const completed = habits.filter(h => h.completions?.[key]).length
+  const completed = habits.filter(h => isCompletedOnDate(h, date)).length
   const total     = habits.length
 
   if (completed === total) return 'all'
