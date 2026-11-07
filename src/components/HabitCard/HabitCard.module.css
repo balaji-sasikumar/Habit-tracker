@@ -5,6 +5,8 @@
   position: relative;
   z-index: 1;
   cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Radio */
@@ -19,8 +21,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
   z-index: 2;
+}
+
+.row:active .radio {
+  transform: scale(0.92);
 }
 
 .radioDone {
@@ -47,14 +53,15 @@
   gap: 12px;
   background: var(--card-bg);
   border-radius: var(--radius-sm);
-  padding: 13px 12px 13px 14px;
+  padding: 12px 10px 12px 14px;
   box-shadow: var(--shadow-sm);
   min-width: 0;
-  transition: opacity 0.3s, background 0.15s;
+  transition: opacity 0.3s, background 0.15s, transform 0.15s;
 }
 
-.card:active {
+.row:active .card {
   background: var(--surface);
+  transform: scale(0.99);
 }
 
 .cardDone {
@@ -125,11 +132,29 @@
   color: var(--red);
 }
 
-/* Chevron hint */
-.chevron {
+/* Dedicated Edit Button */
+.editBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
   color: var(--text-light);
-  font-size: 20px;
-  line-height: 1;
+  background: transparent;
   flex-shrink: 0;
-  margin-left: 2px;
+  transition: color 0.15s, background 0.15s, transform 0.1s;
+}
+
+.editBtn:hover {
+  color: var(--orange);
+  background: var(--orange-light);
+}
+
+.editBtn:active {
+  transform: scale(0.9);
+  background: var(--surface);
+}
+
+.editBtn svg {
+  display: block;
 }
