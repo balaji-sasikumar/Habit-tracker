@@ -32,12 +32,12 @@
   border-radius: 8px;
   background: var(--orange-light);
   color: var(--orange);
-  font-size: 18px;
-  font-weight: 700;
   display: grid;
   place-items: center;
   transition: background 0.15s;
+  flex-shrink: 0;
 }
+.navBtn svg { display: block; }
 .navBtn:active { background: var(--orange); color: white; }
 
 .toggle {

@@ -2,8 +2,10 @@ import { useState, useCallback } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { getHabits, saveHabits } from '../utils/storage'
 
+// Use local date — avoids UTC offset mismatch (e.g. IST midnight = prev day in UTC)
 function todayKey() {
-  return new Date().toISOString().slice(0, 10)
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
 
 function calculateStreak(completions) {

@@ -124,8 +124,16 @@ export default function Calendar({ habits, selectedDate, onSelectDate }) {
           {MONTHS[anchor.getMonth()]} {anchor.getFullYear()}
         </span>
         <div className={styles.controls}>
-          <button onClick={prev} className={styles.navBtn}>‹</button>
-          <button onClick={next} className={styles.navBtn}>›</button>
+          <button onClick={prev} className={styles.navBtn} aria-label="Previous">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true">
+              <path d="M6 1L1 6L6 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <button onClick={next} className={styles.navBtn} aria-label="Next">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true">
+              <path d="M1 1L6 6L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
           <div className={styles.toggle}>
             <button className={view === 'week'  ? styles.toggleActive : styles.toggleBtn} onClick={() => setView('week')}>Week</button>
             <button className={view === 'month' ? styles.toggleActive : styles.toggleBtn} onClick={() => setView('month')}>Month</button>
