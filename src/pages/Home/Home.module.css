@@ -73,6 +73,11 @@
   pointer-events: none;
 }
 
+/* AI Companion Banner */
+.aiWrapper {
+  margin-bottom: 14px;
+}
+
 /* Progress */
 .progressWrapper {
   background: var(--card-bg);

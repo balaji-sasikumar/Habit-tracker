@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { getPin } from '../../utils/storage'
 import PinPad from '../PinPad/PinPad'
+import AiCompanion from '../AiCompanion/AiCompanion'
 import styles from './PinLock.module.css'
 
 export default function PinLock({ onUnlock }) {
@@ -30,7 +31,10 @@ export default function PinLock({ onUnlock }) {
       <div className={styles.top}>
         <div className={styles.lockIcon}>🔒</div>
         <h1 className={styles.title}>Habit Tracker</h1>
-        <p className={styles.sub}>Enter your PIN to continue</p>
+      </div>
+
+      <div className={styles.aiWrapper}>
+        <AiCompanion compact />
       </div>
 
       <PinPad

@@ -5,6 +5,7 @@ import { isSameDay, isFutureDay, isCompletedOnDate } from '../../utils/date'
 import Calendar from '../../components/Calendar/Calendar'
 import HabitCard from '../../components/HabitCard/HabitCard'
 import ProfileModal from '../../components/ProfileModal/ProfileModal'
+import AiCompanion from '../../components/AiCompanion/AiCompanion'
 import styles from './Home.module.css'
 
 function getGreeting() {
@@ -60,6 +61,10 @@ export default function Home({ habitStore }) {
           <button className={styles.avatar} onClick={() => setShowProfile(true)} aria-label="Profile">
             <span className={styles.avatarLetter}>{user.name.charAt(0).toUpperCase()}</span>
           </button>
+        </div>
+
+        <div className={styles.aiWrapper}>
+          <AiCompanion habits={habits} />
         </div>
 
         <Calendar habits={habits} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
