@@ -1,15 +1,20 @@
 .page {
-  padding-top: 20px;
-  min-height: 100dvh;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 20px 40px;
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
+.page::-webkit-scrollbar { width: 0; }
 
+/* Top bar */
 .topBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .backBtn {
@@ -44,7 +49,7 @@
 }
 
 .heroEmoji {
-  font-size: 80px;
+  font-size: 76px;
   line-height: 1;
   filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
   transition: all 0.2s;
@@ -78,7 +83,6 @@
   color: var(--text-dark);
   transition: border-color 0.2s;
 }
-
 .input::placeholder { color: var(--text-light); }
 .input:focus { border-color: var(--orange); }
 .inputError { border-color: var(--red); }
@@ -117,12 +121,9 @@
   box-shadow: 0 4px 14px rgba(255,140,66,0.2);
 }
 
-.iconEmoji {
-  font-size: 24px;
-  line-height: 1;
-}
+.iconEmoji { font-size: 24px; line-height: 1; }
 
-/* Save */
+/* Save button */
 .saveBtn {
   width: 100%;
   background: linear-gradient(135deg, var(--orange), var(--orange-dark));
@@ -133,8 +134,28 @@
   border-radius: var(--radius);
   box-shadow: 0 6px 20px rgba(255,140,66,0.35);
   transition: transform 0.15s;
-  margin-top: auto;
-  margin-bottom: 20px;
   letter-spacing: 0.3px;
+  margin-bottom: 12px;
 }
 .saveBtn:active { transform: scale(0.97); }
+
+/* Delete button */
+.deleteBtn {
+  width: 100%;
+  padding: 15px;
+  border-radius: var(--radius);
+  background: var(--red-bg);
+  color: var(--red);
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.2px;
+  margin-bottom: 8px;
+}
+.deleteBtn:active { transform: scale(0.97); }
+
+.deleteBtnConfirm {
+  background: var(--red);
+  color: white;
+  font-weight: 700;
+}

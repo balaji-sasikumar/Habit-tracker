@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getUser } from '../../utils/storage'
 import Calendar from '../../components/Calendar/Calendar'
 import HabitCard from '../../components/HabitCard/HabitCard'
+import ProfileModal from '../../components/ProfileModal/ProfileModal'
 import styles from './Home.module.css'
 
 function getGreeting() {
@@ -29,68 +30,66 @@ function formatSelectedDate(d, today) {
 }
 
 export default function Home({ habitStore }) {
-  const { habits, toggleCompletion, deleteHabit } = habitStore
+  const { habits, toggleCompletion } = habitStore
   const navigate = useNavigate()
-  const user = getUser()
   const today = new Date()
 
   const [selectedDate, setSelectedDate] = useState(today)
+  const [showProfile, setShowProfile] = useState(false)
+  const [, forceRender] = useState(0)   // force re-render after name change
 
   const selectedKey = toKey(selectedDate)
   const isToday = isSameDay(selectedDate, today)
+  const isFutureDate = selectedDate > today && !isToday
 
-  // For today: use live completedToday; for other dates: check completions map
+  const user = getUser()
+
   const habitsForDate = habits.map(h => ({
     ...h,
-    completedOnDate: !!(h.completions && h.completions[selectedKey]),
+    completedOnDate: !!(h.completions?.[selectedKey]),
   }))
 
-  // Progress — only meaningful for today
   const completedCount = habitsForDate.filter(h => h.completedOnDate).length
   const totalCount = habits.length
   const progress = totalCount > 0 ? (completedCount / totalCount) * 100 : 0
 
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.header}>
-        <div>
-          <p className={styles.greetingLine}>{getGreeting()},</p>
-          <h1 className={styles.nameLine}>{user.name} 👋</h1>
-          <p className={styles.date}>
-            {today.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })}
-          </p>
+      {/* ── STICKY TOP ─────────────────────── */}
+      <div className={styles.top}>
+        <div className={styles.header}>
+          <div>
+            <p className={styles.greetingLine}>{getGreeting()},</p>
+            <h1 className={styles.nameLine}>{user.name} 👋</h1>
+            <p className={styles.date}>
+              {today.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </p>
+          </div>
+          <button className={styles.avatar} onClick={() => setShowProfile(true)} aria-label="Profile">
+            <span className={styles.avatarLetter}>{user.name.charAt(0).toUpperCase()}</span>
+          </button>
         </div>
-        <div className={styles.avatar}>
-          <span className={styles.avatarLetter}>{user.name.charAt(0).toUpperCase()}</span>
-        </div>
+
+        <Calendar habits={habits} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+
+        {totalCount > 0 && (
+          <div className={styles.progressWrapper}>
+            <div className={styles.progressHeader}>
+              <span className={styles.progressLabel}>
+                {formatSelectedDate(selectedDate, today)}
+                <span className={styles.progressSub}> · {completedCount}/{totalCount} done</span>
+              </span>
+              <span className={styles.progressPct}>{Math.round(progress)}%</span>
+            </div>
+            <div className={styles.progressBar}>
+              <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Calendar */}
-      <Calendar
-        habits={habits}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-      />
-
-      {/* Selected date label + progress */}
-      {totalCount > 0 && (
-        <div className={styles.progressWrapper}>
-          <div className={styles.progressHeader}>
-            <span className={styles.progressLabel}>
-              {formatSelectedDate(selectedDate, today)}
-              <span className={styles.progressSub}> · {completedCount}/{totalCount} done</span>
-            </span>
-            <span className={styles.progressPct}>{Math.round(progress)}%</span>
-          </div>
-          <div className={styles.progressBar}>
-            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
-          </div>
-        </div>
-      )}
-
-      {/* Habit list */}
-      <div className={styles.section}>
+      {/* ── SCROLLABLE HABIT LIST ──────────── */}
+      <div className={styles.listArea}>
         {habits.length === 0 ? (
           <div className={styles.empty}>
             <span className={styles.emptyIcon}>🌱</span>
@@ -105,8 +104,8 @@ export default function Home({ habitStore }) {
                 habit={habit}
                 completedOnDate={habit.completedOnDate}
                 onToggle={toggleCompletion}
-                onDelete={deleteHabit}
                 readOnly={!isToday}
+                isFuture={isFutureDate}
               />
             ))}
           </div>
@@ -117,6 +116,14 @@ export default function Home({ habitStore }) {
       <button className={styles.fab} onClick={() => navigate('/add')} aria-label="Add habit">
         <span className={styles.fabIcon}>+</span>
       </button>
+
+      {/* Profile modal */}
+      {showProfile && (
+        <ProfileModal
+          onClose={() => setShowProfile(false)}
+          onUserUpdated={() => forceRender(n => n + 1)}
+        />
+      )}
     </div>
   )
 }

@@ -8,7 +8,7 @@ import Onboarding from './components/Onboarding/Onboarding'
 import PinLock from './components/PinLock/PinLock'
 import './App.css'
 
-const IDLE_MS = 15_000 // 15 seconds
+const IDLE_MS = 15_000
 
 function isSetupDone() {
   try {
@@ -22,53 +22,43 @@ function isSetupDone() {
 export default function App() {
   const habitStore = useHabits()
   const [setupDone, setSetupDone] = useState(() => isSetupDone())
-  const [locked, setLocked] = useState(() => isSetupDone()) // lock on first real load
+  const [locked, setLocked] = useState(() => isSetupDone())
   const idleTimer = useRef(null)
 
-  // ── Idle detection ────────────────────────────────────────────────
   const startIdleTimer = useCallback(() => {
     if (idleTimer.current) clearTimeout(idleTimer.current)
     idleTimer.current = setTimeout(() => setLocked(true), IDLE_MS)
   }, [])
 
   useEffect(() => {
-    if (!setupDone || locked) return // don't track when locked or not setup
-
+    if (!setupDone || locked) return
     const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click']
     events.forEach(e => window.addEventListener(e, startIdleTimer, { passive: true }))
-    startIdleTimer() // kick off timer immediately
-
+    startIdleTimer()
     return () => {
       events.forEach(e => window.removeEventListener(e, startIdleTimer))
       if (idleTimer.current) clearTimeout(idleTimer.current)
     }
   }, [setupDone, locked, startIdleTimer])
 
-  // ── Visibility change — lock if tab was hidden > 15s ─────────────
   useEffect(() => {
     if (!setupDone) return
-
     let hiddenAt = null
-
     function handleVisibility() {
       if (document.visibilityState === 'hidden') {
         hiddenAt = Date.now()
       } else {
-        if (hiddenAt && Date.now() - hiddenAt >= IDLE_MS) {
-          setLocked(true)
-        }
+        if (hiddenAt && Date.now() - hiddenAt >= IDLE_MS) setLocked(true)
         hiddenAt = null
       }
     }
-
     document.addEventListener('visibilitychange', handleVisibility)
     return () => document.removeEventListener('visibilitychange', handleVisibility)
   }, [setupDone])
 
-  // ── Render ────────────────────────────────────────────────────────
   if (!setupDone) {
     return (
-      <div className="app-shell">
+      <div className="app-shell" style={{ overflowY: 'auto' }}>
         <Onboarding onDone={() => { setSetupDone(true); setLocked(false) }} />
       </div>
     )
@@ -84,6 +74,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home habitStore={habitStore} />} />
           <Route path="/add" element={<AddHabit habitStore={habitStore} />} />
+          <Route path="/edit/:id" element={<AddHabit habitStore={habitStore} />} />
         </Routes>
       </div>
     </div>

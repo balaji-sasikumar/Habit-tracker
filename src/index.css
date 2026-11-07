@@ -1,5 +1,4 @@
 :root {
-  /* Dark theme */
   --bg: #111318;
   --card-bg: #1C1F27;
   --surface: #242830;
@@ -35,26 +34,28 @@ body {
   background: var(--bg);
   color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
+/* Fixed-height shell — enables sticky top + scrollable list inside */
 .app-shell {
   max-width: 430px;
-  min-height: 100dvh;
+  height: 100dvh;
   margin: 0 auto;
-  position: relative;
   background: var(--bg);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
+/* page-content is NOT the scroller — pages manage their own scroll */
 .page-content {
   flex: 1;
-  overflow-y: auto;
-  padding: 0 20px 100px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
-
-.page-content::-webkit-scrollbar { width: 0; }
 
 button {
   cursor: pointer;

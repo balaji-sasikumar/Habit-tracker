@@ -1,13 +1,13 @@
-/* Row = radio + card side by side */
 .row {
   display: flex;
   align-items: center;
   gap: 12px;
   position: relative;
   z-index: 1;
+  cursor: pointer;
 }
 
-/* Small radio circle */
+/* Radio */
 .radio {
   width: 22px;
   height: 22px;
@@ -32,11 +32,6 @@
   cursor: default;
 }
 
-.radioReadOnly.radioDone {
-  background: var(--green);
-  border-color: var(--green);
-}
-
 .check {
   color: white;
   font-size: 11px;
@@ -52,17 +47,20 @@
   gap: 12px;
   background: var(--card-bg);
   border-radius: var(--radius-sm);
-  padding: 13px 14px;
+  padding: 13px 12px 13px 14px;
   box-shadow: var(--shadow-sm);
   min-width: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, background 0.15s;
+}
+
+.card:active {
+  background: var(--surface);
 }
 
 .cardDone {
   opacity: 0.55;
 }
 
-/* Icon */
 .iconBox {
   width: 42px;
   height: 42px;
@@ -79,7 +77,6 @@
   line-height: 1;
 }
 
-/* Text */
 .info {
   flex: 1;
   display: flex;
@@ -108,31 +105,14 @@
   font-weight: 500;
 }
 
-/* Delete */
-.deleteBtn {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--text-light);
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  line-height: 1;
-  transition: background 0.2s, color 0.2s;
-  padding-bottom: 1px;
-}
-.deleteBtn:active { background: var(--red-bg); color: var(--red); }
-
 /* Status pill */
 .pill {
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 999px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .pillDone {
@@ -143,4 +123,13 @@
 .pillMissed {
   background: var(--red-bg);
   color: var(--red);
+}
+
+/* Chevron hint */
+.chevron {
+  color: var(--text-light);
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-left: 2px;
 }
