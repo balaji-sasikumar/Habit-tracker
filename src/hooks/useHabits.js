@@ -8,6 +8,11 @@ function todayKey() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
 
+// Legacy UTC key — needed to migrate / unmark entries stored before the timezone fix
+function todayKeyUTC() {
+  return new Date().toISOString().slice(0, 10)
+}
+
 function calculateStreak(completions) {
   let streak = 0
   const today = new Date()
@@ -50,13 +55,23 @@ export function useHabits() {
   }, [])
 
   const toggleCompletion = useCallback((id) => {
-    const key = todayKey()
+    const local = todayKey()
+    const utc   = todayKeyUTC()
+
     setHabits(prev => {
       const updated = prev.map(h => {
         if (h.id !== id) return h
         const completions = { ...h.completions }
-        if (completions[key]) delete completions[key]
-        else completions[key] = true
+        if (completions[local]) {
+          // marked with new local key → unmark
+          delete completions[local]
+        } else if (completions[utc]) {
+          // marked with old UTC key → unmark (migration path)
+          delete completions[utc]
+        } else {
+          // not marked → mark with local key going forward
+          completions[local] = true
+        }
         return { ...h, completions }
       })
       saveHabits(updated)
@@ -74,7 +89,8 @@ export function useHabits() {
 
   const habitsWithMeta = habits.map(h => ({
     ...h,
-    completedToday: !!h.completions[todayKey()],
+    // Check both local and legacy UTC key so old data still shows as checked
+    completedToday: !!(h.completions[todayKey()] || h.completions[todayKeyUTC()]),
     streak: calculateStreak(h.completions),
   }))
 
