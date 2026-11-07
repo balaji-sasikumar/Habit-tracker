@@ -1,0 +1,101 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+/* Dots */
+.dots {
+  display: flex;
+  gap: 18px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.dotFilled {
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: scale(1.1);
+}
+
+.dotError {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%  { transform: translateX(-10px); }
+  35%  { transform: translateX(10px); }
+  55%  { transform: translateX(-7px); }
+  75%  { transform: translateX(7px); }
+  90%  { transform: translateX(-3px); }
+}
+
+.shake {
+  animation: shake 0.42s ease;
+}
+
+/* Numpad grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.numBtn {
+  height: 68px;
+  border-radius: 18px;
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-size: 24px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.12s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.numBtn:active {
+  background: var(--orange-light);
+  color: var(--orange);
+  transform: scale(0.93);
+}
+
+.delBtn {
+  height: 68px;
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text-mid);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.delBtn:active {
+  background: var(--red-bg);
+  color: var(--red);
+  transform: scale(0.93);
+}

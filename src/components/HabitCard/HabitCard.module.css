@@ -1,0 +1,146 @@
+/* Row = radio + card side by side */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Small radio circle */
+.radio {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+  z-index: 2;
+}
+
+.radioDone {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
+.radioReadOnly {
+  cursor: default;
+}
+
+.radioReadOnly.radioDone {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.check {
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Card body */
+.card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 13px 14px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+  transition: opacity 0.3s;
+}
+
+.cardDone {
+  opacity: 0.55;
+}
+
+/* Icon */
+.iconBox {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconEmoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Text */
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  color: var(--text-light);
+}
+
+.streak {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-weight: 500;
+}
+
+/* Delete */
+.deleteBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-light);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: background 0.2s, color 0.2s;
+  padding-bottom: 1px;
+}
+.deleteBtn:active { background: var(--red-bg); color: var(--red); }
+
+/* Status pill */
+.pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.pillDone {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.pillMissed {
+  background: var(--red-bg);
+  color: var(--red);
+}

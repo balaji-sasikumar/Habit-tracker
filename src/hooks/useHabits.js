@@ -1,0 +1,78 @@
+import { useState, useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { getHabits, saveHabits } from "../utils/storage";
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function calculateStreak(completions) {
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    if (completions[key]) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+export function useHabits() {
+  const [habits, setHabits] = useState(() => getHabits());
+
+  const addHabit = useCallback((name, icon, color) => {
+    const newHabit = {
+      id: uuidv4(),
+      name,
+      icon: icon || "⭐",
+      color: color || "#FFE5D0",
+      completions: {},
+      createdAt: new Date().toISOString(),
+    };
+    setHabits((prev) => {
+      const updated = [...prev, newHabit];
+      saveHabits(updated);
+      return updated;
+    });
+    return newHabit;
+  }, []);
+
+  const toggleCompletion = useCallback((id) => {
+    const key = todayKey();
+    setHabits((prev) => {
+      const updated = prev.map((h) => {
+        if (h.id !== id) return h;
+        const completions = { ...h.completions };
+        if (completions[key]) {
+          delete completions[key];
+        } else {
+          completions[key] = true;
+        }
+        return { ...h, completions };
+      });
+      saveHabits(updated);
+      return updated;
+    });
+  }, []);
+
+  const deleteHabit = useCallback((id) => {
+    setHabits((prev) => {
+      const updated = prev.filter((h) => h.id !== id);
+      saveHabits(updated);
+      return updated;
+    });
+  }, []);
+
+  const habitsWithMeta = habits.map((h) => ({
+    ...h,
+    completedToday: !!h.completions[todayKey()],
+    streak: calculateStreak(h.completions),
+  }));
+
+  return { habits: habitsWithMeta, addHabit, toggleCompletion, deleteHabit };
+}
