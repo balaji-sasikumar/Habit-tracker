@@ -63,9 +63,7 @@ export default function Home({ habitStore }) {
           </button>
         </div>
 
-        <div className={styles.aiWrapper}>
-          <AiCompanion habits={habits} />
-        </div>
+        <AiCompanion habits={habits} />
 
         <Calendar habits={habits} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
