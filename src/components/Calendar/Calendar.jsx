@@ -42,8 +42,15 @@ function getMonthCells(anchor) {
   return cells
 }
 
-/* ── Component ────────────────────────────────────────── */
-export default function Calendar({ habits, selectedDate, onSelectDate }) {
+export default function Calendar({
+  habits,
+  selectedDate,
+  onSelectDate,
+  totalCount = 0,
+  completedCount = 0,
+  progress = 0,
+  dateLabel = 'Today',
+}) {
   const [view,   setView]   = useState('week')
   const [anchor, setAnchor] = useState(new Date())
   const today = new Date()
@@ -71,7 +78,6 @@ export default function Calendar({ habits, selectedDate, onSelectDate }) {
         className={styles.dayBtn}
         onClick={() => onSelectDate(d)}
       >
-        {/* Number circle */}
         <span className={[
           styles.num,
           isToday    ? styles.numToday    : '',
@@ -80,13 +86,11 @@ export default function Calendar({ habits, selectedDate, onSelectDate }) {
           {d.getDate()}
         </span>
 
-        {/* Status dot — hidden for future / no data */}
         <span className={[
           styles.dot,
           status === 'all'     ? styles.dotAll     : '',
           status === 'partial' ? styles.dotPartial : '',
           status === 'missed'  ? styles.dotMissed  : '',
-          // invisible placeholder keeps layout stable
           (status === 'future' || status === 'none') ? styles.dotHidden : '',
         ].join(' ')} />
       </button>
@@ -131,6 +135,26 @@ export default function Calendar({ habits, selectedDate, onSelectDate }) {
         ? <div className={styles.weekGrid}>{weekDays.map((d, i)   => renderDay(d, i))}</div>
         : <div className={styles.monthGrid}>{monthCells.map((d, i) => renderDay(d, i))}</div>
       }
+
+      {/* Integrated Progress Indicator (no separate bulky card needed) */}
+      {totalCount > 0 && (
+        <div className={styles.progressContainer}>
+          <div className={styles.progressHeader}>
+            <span className={styles.progressLabel}>
+              {dateLabel} · <span className={styles.progressSub}>{completedCount}/{totalCount} done</span>
+            </span>
+            <span className={`${styles.progressPct} ${progress === 100 ? styles.progressPctComplete : ''}`}>
+              {Math.round(progress)}%
+            </span>
+          </div>
+          <div className={styles.progressBar}>
+            <div
+              className={`${styles.progressFill} ${progress === 100 ? styles.progressFillComplete : ''}`}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Legend */}
       <div className={styles.legend}>

@@ -65,22 +65,15 @@ export default function Home({ habitStore }) {
 
         <AiCompanion habits={habits} />
 
-        <Calendar habits={habits} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
-
-        {totalCount > 0 && (
-          <div className={styles.progressWrapper}>
-            <div className={styles.progressHeader}>
-              <span className={styles.progressLabel}>
-                {formatSelectedDate(selectedDate, today)}
-                <span className={styles.progressSub}> · {completedCount}/{totalCount} done</span>
-              </span>
-              <span className={styles.progressPct}>{Math.round(progress)}%</span>
-            </div>
-            <div className={styles.progressBar}>
-              <div className={styles.progressFill} style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-        )}
+        <Calendar
+          habits={habits}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          totalCount={totalCount}
+          completedCount={completedCount}
+          progress={progress}
+          dateLabel={formatSelectedDate(selectedDate, today)}
+        />
       </div>
 
       {/* ── SCROLLABLE HABIT LIST ──────────── */}
